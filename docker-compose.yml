@@ -17,10 +17,9 @@ services:
     volumes:
       # Mount for influxdb data directory and configuration
       # - /Users/anaisdotis-georgiou/temp/influxdb2:/var/lib/influxdb2:rw
-      - /docker/docker-compose/influxdb/influxdb2:/var/lib/influxdb2:rw
-      # - ./ssl/influxdb-selfsigned.crt:/etc/ssl/influxdb-selfsigned.crt:rw
-      # - ./ssl/influxdb-selfsigned.key:/etc/ssl/influxdb-selfsigned.key:rw
-      - /docker/docker-compose/influxdb/ssl:/etc/ssl:rw
+      - /docker/docker-compose/influxdb/data:/var/lib/influxdb2:rw
+      - /docker/docker-compose/influxdb/ssl/influxdb-selfsigned.crt:/etc/ssl/influxdb-selfsigned.crt:rw
+      - /docker/docker-compose/influxdb/ssl/influxdb-selfsigned.key:/etc/ssl/influxdb-selfsigned.key:rw
     environment: 
        # Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
       - DOCKER_INFLUXDB_INIT_MODE=setup
@@ -47,9 +46,6 @@ services:
       # - ./influxv2.env
       - .env
     environment: 
-      # - DOCKER_INFLUXDB_INIT_ORG=myorg
-      # - DOCKER_INFLUXDB_INIT_BUCKET=mybucket
-      # - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=mytoken
       - "DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}"
       - "DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}"
       - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}"
