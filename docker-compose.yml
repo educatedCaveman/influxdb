@@ -24,11 +24,11 @@ services:
     environment: 
        # Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - "DOCKER_INFLUXDB_INIT_USERNAME=${myusername}"
-      - "DOCKER_INFLUXDB_INIT_PASSWORD=${passwordpasswordpassword}"
-      - "DOCKER_INFLUXDB_INIT_ORG=${myorg}"
-      - "DOCKER_INFLUXDB_INIT_BUCKET=${mybucket}"
-      - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${mytoken}"
+      - "DOCKER_INFLUXDB_INIT_USERNAME=${DOCKER_INFLUXDB_INIT_USERNAME}"
+      - "DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}"
+      - "DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}"
+      - "DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}"
+      - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}"
       - INFLUXD_TLS_CERT=/etc/ssl/influxdb-selfsigned.crt
       - INFLUXD_TLS_KEY=/etc/ssl/influxdb-selfsigned.key
     entrypoint: ["./entrypoint.sh"]
@@ -50,9 +50,9 @@ services:
       # - DOCKER_INFLUXDB_INIT_ORG=myorg
       # - DOCKER_INFLUXDB_INIT_BUCKET=mybucket
       # - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=mytoken
-      - "DOCKER_INFLUXDB_INIT_ORG=${myorg}"
-      - "DOCKER_INFLUXDB_INIT_BUCKET=${mybucket}"
-      - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${mytoken}"
+      - "DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}"
+      - "DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}"
+      - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}"
     depends_on:
       - influxdb_cli
 volumes:
