@@ -34,6 +34,9 @@ services:
     restart: on-failure:10
     depends_on:
       - influxdb
+    # try this: https://community.influxdata.com/t/influxdb-container-not-getting-started/22050/2
+    ulimits:
+      nofile: 10000
   telegraf:
     image: telegraf
     links:
