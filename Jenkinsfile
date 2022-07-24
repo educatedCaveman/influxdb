@@ -29,7 +29,7 @@ pipeline {
             steps {
                 // deploy configs to DEV
                 echo 'unlock the repo (DEV)'
-                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/git-crypt.yml --extra-vars repo=${REPO}'
+                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/git-crypt.yml --extra-vars repo=${REPO} -l "lv_426"'
             }
         }
         // trigger portainer redeploy
