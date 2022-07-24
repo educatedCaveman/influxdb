@@ -4,8 +4,9 @@ pipeline {
     environment {
         ANSIBLE_REPO = '/var/lib/jenkins/workspace/ansible_master'
         WEBHOOK = credentials('JENKINS_DISCORD')
-        PORTAINER_DEV_WEBHOOK = credentials('PORTAINER_WEBHOOK_DEV_INFLUX')
-        PORTAINER_PRD_WEBHOOK = credentials('PORTAINER_WEBHOOK_PRD_INFLUX')
+        // PORTAINER_DEV_WEBHOOK = credentials('PORTAINER_WEBHOOK_DEV_INFLUX')
+        // PORTAINER_PRD_WEBHOOK = credentials('PORTAINER_WEBHOOK_PRD_INFLUX')
+        REPO = "influxdb"
     }
 
     //triggering periodically so the code is always present
@@ -19,7 +20,16 @@ pipeline {
             steps {
                 // deploy configs to DEV
                 echo 'deploy docker config files (DEV)'
-                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/docker/deploy_docker_compose_dev.yml --extra-vars repo="influxdb"'
+                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/docker/deploy_docker_compose_dev.yml --extra-vars repo=${REPO}'
+            }
+        }
+        // unlock the repo
+        stage('unlock the repo') {
+            when { branch 'dev_test' }
+            steps {
+                // deploy configs to DEV
+                echo 'unlock the repo (DEV)'
+                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/git-crypt.yml --extra-vars repo=${REPO}'
             }
         }
         // trigger portainer redeploy
@@ -29,29 +39,29 @@ pipeline {
             steps {
                 // deploy configs to DEV
                 echo 'Redeploy DEV stack'
-                sh 'http post ${PORTAINER_DEV_WEBHOOK}'
+                // sh 'http post ${PORTAINER_WEBHOOK_DEV_INFLUX}'
             }
         }
 
-        // deploy code to sevastopol, when the branch is 'master'
-        stage('deploy prd code') {
-            when { branch 'master' }
-            steps {
-                // deploy configs to PRD
-                echo 'deploy docker config files (PRD)'
-                sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/docker/deploy_docker_compose_prd.yml --extra-vars repo="influxdb"'
-            }
-        }
-        // trigger portainer redeploy
-        // separated out so this only gets run if the ansible playbook doesn't fail
-        stage('redeploy portainer stack (PRD)') {
-            when { branch 'master' }
-            steps {
-                // deploy configs to PRD
-                echo 'Redeploy PRD stack'
-                sh 'http post ${PORTAINER_PRD_WEBHOOK}'
-            }
-        }
+        // // deploy code to sevastopol, when the branch is 'master'
+        // stage('deploy prd code') {
+        //     when { branch 'master' }
+        //     steps {
+        //         // deploy configs to PRD
+        //         echo 'deploy docker config files (PRD)'
+        //         sh 'ansible-playbook ${ANSIBLE_REPO}/deploy/docker/deploy_docker_compose_prd.yml --extra-vars repo=${REPO}'
+        //     }
+        // }
+        // // trigger portainer redeploy
+        // // separated out so this only gets run if the ansible playbook doesn't fail
+        // stage('redeploy portainer stack (PRD)') {
+        //     when { branch 'master' }
+        //     steps {
+        //         // deploy configs to PRD
+        //         echo 'Redeploy PRD stack'
+        //         sh 'http post ${PORTAINER_WEBHOOK_PRD_INFLUX}'
+        //     }
+        // }
 
     }
     post {
