@@ -2,10 +2,9 @@
 version: '3'
 services:
   influxdb:
-    image: influxdb:latest
+    image: influxdb@sha256:162bb98a1163421ba970443cc0696f7c7b716a5c2ad495940befb88ef3ee53bd
     volumes:
       # Mount for influxdb data directory and configuration
-      # - /Users/anaisdotis-georgiou/temp/influxdb2:/var/lib/influxdb2:rw
       - /docker/docker-compose/influxdb/data:/var/lib/influxdb2:rw
     ports:
       - "8086:8086"
@@ -16,10 +15,7 @@ services:
     image: influxdb:latest
     volumes:
       # Mount for influxdb data directory and configuration
-      # - /Users/anaisdotis-georgiou/temp/influxdb2:/var/lib/influxdb2:rw
       - /docker/docker-compose/influxdb/influxdb2:/var/lib/influxdb2:rw
-      # - ./ssl/influxdb-selfsigned.crt:/etc/ssl/influxdb-selfsigned.crt:rw
-      # - ./ssl/influxdb-selfsigned.key:/etc/ssl/influxdb-selfsigned.key:rw
       - /docker/docker-compose/influxdb/ssl:/etc/ssl:rw
     environment: 
        # Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
@@ -36,20 +32,15 @@ services:
     depends_on:
       - influxdb
   telegraf:
-    image: telegraf
+    image: telegraf:1.28
     links:
       - influxdb
     volumes:
       # Mount for telegraf config
-      # - ./telegraf/mytelegraf.conf:/etc/telegraf/telegraf.conf
       - /docker/docker-compose/influxdb/telegraf.conf:/etc/telegraf/telegraf.conf
     env_file:
-      # - ./influxv2.env
       - .env
     environment: 
-      # - DOCKER_INFLUXDB_INIT_ORG=myorg
-      # - DOCKER_INFLUXDB_INIT_BUCKET=mybucket
-      # - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=mytoken
       - "DOCKER_INFLUXDB_INIT_ORG=${myorg}"
       - "DOCKER_INFLUXDB_INIT_BUCKET=${mybucket}"
       - "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${mytoken}"
