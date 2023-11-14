@@ -32,7 +32,7 @@ services:
     depends_on:
       - influxdb
   telegraf:
-    image: telegraf@sha256:ae8d04a98fa87decb8eaedc776b64e2b638abf24f49c8df6e88b935454ffdedf
+    image: telegraf@sha256:732c880d39e733838222cc0a4056878b9b2860710c87c66594416991bf5679d6
     links:
       - influxdb
     volumes:
