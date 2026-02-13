@@ -2,7 +2,7 @@
 version: '3'
 services:
   influxdb:
-    image: influxdb@sha256:ec3ab8f4182d09dd47839dc56e99882ae9fe5d87ccc5e0a42e2ed944a1ed166e
+    image: influxdb@sha256:80d06d6e62e4f1607126bfca0352e2b814ee0d5e2cb0d01b873ea0c3ff212a94
     volumes:
       # Mount for influxdb data directory and configuration
       - /docker/docker-compose/influxdb/data:/var/lib/influxdb2:rw
